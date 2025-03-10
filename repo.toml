@@ -1,0 +1,17 @@
+[builder]
+enabled = true  # Whether the automatic builder is enabled
+output_dir = "target"  # Directory where build artifacts will be stored
+log_level = "info"  # Logging level: debug, info, warning, error
+
+[builder.sources]
+include = ["src"]  # Source file patterns to include
+exclude = ["tests", "doc", "target"]  # Files or directories to exclude from the build
+
+[builder.commands]
+pre_build = ["echo Preparing build...", "g-cli "]  # Commands to run before building
+build = ["make all"]  # Main build command
+post_build = ["echo Build completed!", "deploy.sh"]  # Commands to run after successful build
+
+[builder.notifications]
+email = "alerts@example.com"  # Email for build failure notifications
+webhook = "https://hooks.example.com/build"  # Webhook URL for notifications
