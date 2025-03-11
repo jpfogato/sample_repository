@@ -1,4 +1,8 @@
-# LabVIEW-Python Project Setup Guide
+# App Description
+
+LabVIEW project template for developing and compiling code for internal or external usage.
+
+# Project Setup Guide
 
 This repository contains a project that integrates LabVIEW and Python, likely for data processing, automation, or control applications. This guide will help you set up the development environment and get started with the project.
 
@@ -6,7 +10,7 @@ This repository contains a project that integrates LabVIEW and Python, likely fo
 
 Before you begin, ensure you have the following installed:
 
-- **LabVIEW:** Ensure you have a compatible version of National Instruments LabVIEW installed. The specific version might be defined within `repo.toml` or `env_setup.ps1`.
+- **LabVIEW:** Ensure you have a compatible version of National Instruments LabVIEW installed. The specific version might be defined within `repo.toml`.
 - **Python:** A supported Python distribution (e.g., Python 3.8 or later) is required. Check `repo.toml` or `setup.py` for specific version requirements.
 - **pip:** The Python package installer (usually included with Python).
 - **Powershell:** A recent version of Powershell.

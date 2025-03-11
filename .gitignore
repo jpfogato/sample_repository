@@ -13,6 +13,9 @@
 !*.txt
 !*.ini
 !*.id
+!*.viancfg
+!*.md
+!*.ps1 
 
 # Ensure Git tracks folders (but not their ignored contents)
 !*/
