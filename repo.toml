@@ -6,7 +6,7 @@ build_controller = ">=4.0.0"
 
 [builder]
 enabled = true  # Whether the automatic builder is enabled
-output_dir = "target"  # Directory where build artifacts will be stored
+output_dir = "build"  # Directory where build artifacts will be stored
 log_level = "info"  # Logging level: debug, info, warning, error
 
 [builder.project] 

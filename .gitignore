@@ -1,4 +1,22 @@
-/target
+# Ignore everything by default
+*
+
+# Allow only specific file extensions
+!*.vi
+!*.vim
+!*.lvproj
+!*.ctl
+!*.lvclass
+!*.lvlib
+!*.xctl
+!*.json
+!*.txt
+!*.ini
+
+# Ensure Git tracks folders (but not their ignored contents)
+!*/
+
+# Ignore these specific folders
+/build
 /docs
 /ext
-/src/test/**
