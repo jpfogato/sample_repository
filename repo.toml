@@ -36,7 +36,7 @@ post_build = [
 email = "alerts@example.com"  # Email for build failure notifications
 webhook = "https://hooks.example.com/build"  # Webhook URL for notifications
 
-[doc]
+[docs]
 download = [
 	"https://example.com/file1.pdf",
 	"https://example.com/file2.pdf",
