@@ -12,11 +12,11 @@
 !*.json
 !*.txt
 !*.ini
+!*.id
 
 # Ensure Git tracks folders (but not their ignored contents)
 !*/
 
-# Ignore these specific folders
-/build
-/docs
-/ext
+# Ignore the specif folders
+docs/
+ext/
