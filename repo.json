@@ -1,0 +1,50 @@
+{
+  "dependencies": {
+    "vcs_interfaces": {
+      "version": "2.0.1",
+      "include_source": false,
+      "url": "changeme.git"
+    },
+    "vpi": ">=23.3.0",
+    "build_controller": ">=4.0.0"
+  },
+  "builder": {
+    "enabled": true,
+    "output_dir": "build",
+    "log_level": "info",
+    "project": {
+      "lv_version": "2023",
+      "project_file": "MyProject.lvproj",
+      "build_spec": "MyApplication"
+    },
+    "commands": {
+      "pre_build": [
+        "echo Preparing build...",
+        "cd ext/build_controller/target",
+        "g-cli build_controller -- --action pre_build --config \"TOML_FILE\" "
+      ],
+      "build": [
+        "echo Building...",
+        "cd ext/build_controller/target",
+        "g-cli build_controller -- --action build --config \"TOML_FILE\" "
+      ],
+      "post_build": [
+        "echo Build completed!",
+        "cd ext/build_controller/target",
+        "g-cli build_controller -- --action post_build --config \"TOML_FILE\" "
+      ]
+    },
+    "notifications": {
+      "email": "alerts@example.com",
+      "webhook": "https://hooks.example.com/build"
+    }
+  },
+  "docs": {
+    "download": [
+      "https://example.com/file1.pdf",
+      "https://example.com/file2.pdf",
+      "https://example.com/file3.pdf"
+    ],
+    "destination": "doc"
+  }
+}
