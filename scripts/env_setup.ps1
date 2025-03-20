@@ -6,7 +6,7 @@ if (!(Get-Command pip -ErrorAction SilentlyContinue)) {
 
 # Install dependencies
 Write-Host "Installing required Python dependencies..."
-pip install toml requests
+pip install shutil requests subprocess
 
 Write-Host "Python dependencies installed successfully."
 exit 0

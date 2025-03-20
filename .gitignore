@@ -12,13 +12,13 @@
 !*.json
 !*.txt
 !*.ini
-!*.id
 !*.viancfg
 !*.md
 !*.ps1 
+!*.vit
 
 # Ensure Git tracks folders (but not their ignored contents)
-!*/
+# !*/
 
 # Ignore the specif folders
 docs/

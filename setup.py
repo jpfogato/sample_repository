@@ -1,72 +1,137 @@
-import toml
+import json
+import subprocess
 import os
 import requests
 import shutil
-import subprocess
+import zipfile
+from pathlib import Path
 
 
-def download_file(url, destination_path):
-    """Downloads a file from a URL to a destination path."""
+def download_and_extract_zip(url, destination_folder):
+    """Downloads a zip file from a URL and extracts it to the destination folder."""
     try:
         response = requests.get(url, stream=True)
-        response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+        response.raise_for_status()  # Raise an exception for bad status codes
 
-        with open(destination_path, 'wb') as file:
+        zip_filename = os.path.join(destination_folder, "temp.zip")
+        with open(zip_filename, 'wb') as file:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
 
-        print(f"Downloaded: {url} -> {destination_path}")
+        with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
+            zip_ref.extractall(destination_folder)
+
+        os.remove(zip_filename)  # Remove the temporary zip file
+        print(f"Downloaded and extracted {url} to {destination_folder}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading {url}: {e}")
+    except zipfile.BadZipFile as e:
+        print(f"Error: Invalid zip file downloaded from {url}: {e}")
+    except Exception as e:
+        print(
+            f"An unexpected error occurred while downloading or extracting {url}: {e}")
+
+
+def download_file(url, destination_folder, filename=None):
+    """Downloads a file from a URL to the destination folder."""
+    try:
+        response = requests.get(url, stream=True)
+        response.raise_for_status()  # Raise an exception for bad status codes
+
+        if filename is None:
+            filename = os.path.basename(url)
+        filepath = os.path.join(destination_folder, filename)
+
+        with open(filepath, 'wb') as file:
+            for chunk in response.iter_content(chunk_size=8192):
+                file.write(chunk)
+
+        print(f"Downloaded {url} to {filepath}")
+
     except requests.exceptions.RequestException as e:
         print(f"Error downloading {url}: {e}")
     except Exception as e:
-        print(f"An error occurred during download: {e}")
+        print(f"An unexpected error occurred while downloading {url}: {e}")
 
 
-def create_dependencies(dependencies, ext_path):
-    """Creates folders for dependencies based on repo.toml."""
-    for dep_name, dep_info in dependencies.items():
-        dep_path = os.path.join(ext_path, dep_name)
-        os.makedirs(dep_path, exist_ok=True)
-        print(f"Created dependency folder: {dep_path}")
+def setup_repository(repo_json_path):
+    """
+    Sets up the local repository based on the settings in the repo.json file.
 
-        # This can be improved to consider the source attribute
-        # and clone the repo if it is a git repo, for example.
-        if isinstance(dep_info, dict) and 'include_source' in dep_info and dep_info['include_source']:
-            pass
-            # logic to clone a repository.
+    Args:
+        repo_json_path (str): The path to the repo.json file.
+    """
 
-
-def create_docs(docs_data, docs_path):
-    """Downloads documentation files based on repo.toml."""
-    os.makedirs(docs_path, exist_ok=True)
-    for url in docs_data:
-        file_name = os.path.basename(url)
-        destination = os.path.join(docs_path, file_name)
-        download_file(url, destination)
-
-
-def main():
-    """Main function to read repo.toml and set up the repository."""
     try:
-        config = toml.load("repo.toml")
+        with open(repo_json_path, 'r') as f:
+            repo_data = json.load(f)
     except FileNotFoundError:
-        print("Error: repo.toml not found.")
+        print(f"Error: repo.json file not found at {repo_json_path}")
         return
-    except toml.TomlDecodeError as e:
-        print(f"Error parsing repo.toml: {e}")
+    except json.JSONDecodeError:
+        print(f"Error: Invalid JSON format in {repo_json_path}")
         return
 
-    ext_path = "ext"
-    docs_path = config.get("docs", {}).get("destination", "doc")
+    # Handle dependencies
+    if "dependencies" in repo_data:
+        print("Setting up dependencies...")
+        dependencies = repo_data["dependencies"]
 
-    if "dependencies" in config:
-        create_dependencies(config["dependencies"], ext_path)
+        if isinstance(dependencies, dict):
+            # Handle externals
+            if "externals" in dependencies:
+                externals = dependencies["externals"]
+                for external in externals:
+                    if "folder" in external and "url" in external:
+                        folder_name = external["folder"]
+                        url = external["url"]
+                        destination_folder = os.path.join("ext", folder_name)
 
-    if "docs" in config and "download" in config["docs"]:
-        create_docs(config["docs"]["download"], docs_path)
+                        if not os.path.exists(destination_folder):
+                            os.makedirs(destination_folder)
+
+                        if url.endswith(".zip"):
+                            download_and_extract_zip(
+                                url, destination_folder)
+                        else:
+                            download_file(url, destination_folder)
+                    else:
+                        print(
+                            f"Error: Invalid external dependency format: {external}")
+            else:
+                print("No externals found in dependencies.")
+        else:
+            print("Error: dependencies is not a dictionary")
+            return
+    else:
+        print("No dependencies found in repo.json.")
+
+    # Handle docs
+    if "docs" in repo_data:
+        print("Downloading documentation...")
+        docs_data = repo_data["docs"]
+        if "download" in docs_data and "destination" in docs_data:
+            download_urls = docs_data["download"]
+            destination_dir = docs_data["destination"]
+
+            if not os.path.exists(destination_dir):
+                os.makedirs(destination_dir)
+
+            for url in download_urls:
+                download_file(url, destination_dir)
+        else:
+            print("Error: download or destination not found in docs")
+            return
+    else:
+        print("No docs found in repo.json.")
 
     print("Repository setup completed.")
 
 
 if __name__ == "__main__":
-    main()
+    # Get the directory of the current script
+    script_dir = Path(__file__).parent
+    # Construct the path to repo.json relative to the script
+    repo_json_path = script_dir / "repo.json"
+    setup_repository(repo_json_path)

@@ -1,17 +1,21 @@
 {
   "dependencies": {
-    "vcs_interfaces": {
-      "version": "2.0.1",
-      "include_source": false,
-      "url": "changeme.git"
-    },
-    "vpi": ">=23.3.0",
-    "build_controller": ">=4.0.0"
+    "externals":  
+    [        
+      {
+        "folder": "build_controller", 
+        "url": "https://github.com/jpfogato/build_controller/releases/1.0.0/build_controller.exe" 
+      },
+      {
+        "folder": "ffmpeg", 
+        "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl-shared.zip" 
+      }          
+    ]
+
   },
   "builder": {
     "enabled": true,
     "output_dir": "build",
-    "log_level": "info",
     "project": {
       "lv_version": "2023",
       "project_file": "MyProject.lvproj",
@@ -20,18 +24,18 @@
     "commands": {
       "pre_build": [
         "echo Preparing build...",
-        "cd ext/build_controller/target",
-        "g-cli build_controller -- --action pre_build --config \"TOML_FILE\" "
+        "cd ext/build_controller",
+        "g-cli build_controller -- --action pre_build --config \"JSON_FILE\" "
       ],
       "build": [
         "echo Building...",
-        "cd ext/build_controller/target",
-        "g-cli build_controller -- --action build --config \"TOML_FILE\" "
+        "cd ext/build_controller",
+        "g-cli build_controller -- --action build --config \"JSON_FILE\" "
       ],
       "post_build": [
         "echo Build completed!",
-        "cd ext/build_controller/target",
-        "g-cli build_controller -- --action post_build --config \"TOML_FILE\" "
+        "cd ext/build_controller",
+        "g-cli build_controller -- --action post_build --config \"JSON_FILE\" "
       ]
     },
     "notifications": {
