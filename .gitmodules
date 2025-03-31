@@ -1,4 +1,4 @@
 [submodule "af-error_handling"]
   path = ext/af-error_handling
   url = https://github.com/jpfogato/labview-af_error_handling.git
-  branch = 89a1ecf  # ← Replace with `tag = v0.1.0` if supported
+  tag = v0.1.0
