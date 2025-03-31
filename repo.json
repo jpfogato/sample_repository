@@ -1,19 +1,5 @@
 {
-  "dependencies": {
-    "externals":  
-    [        
-      {
-        "folder": "build_controller", 
-        "url": "https://github.com/jpfogato/build_controller/releases/1.0.0/build_controller.exe" 
-      },
-      {
-        "folder": "ffmpeg", 
-        "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl-shared.zip" 
-      }          
-    ]
-
-  },
-  "builder": {
+	"builder": {
     "enabled": true,
     "output_dir": "build",
     "project": {

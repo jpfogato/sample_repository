@@ -16,6 +16,7 @@
 !*.md
 !*.ps1 
 !*.vit
+!*.gitmodules
 
 # Ensure Git tracks folders (but not their ignored contents)
 # !*/
