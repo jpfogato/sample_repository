@@ -1,0 +1,31 @@
+{
+    "builder": {
+        "output_dir": "build\\release",
+        "project": {
+            "lv_version": "2023",
+            "project_file": "MyProject.lvproj",
+            "build_spec": "MyApplication"
+        },
+        "commands": {
+            "pre_build": [
+                "echo Preparing build...",
+                "cd ext/build_controller",
+                "g-cli build_controller -- --action pre_build --config \"JSON_FILE\" "
+            ],
+            "build": [
+                "echo Building...",
+                "cd ext/build_controller",
+                "g-cli build_controller -- --action build --config \"JSON_FILE\" "
+            ],
+            "post_build": [
+                "echo Build completed!",
+                "cd ext/build_controller",
+                "g-cli build_controller -- --action post_build --config \"JSON_FILE\" "
+            ]
+        },
+        "notifications": {
+            "email": "alerts@example.com",
+            "webhook": "https://hooks.example.com/build"
+        }
+    }
+}

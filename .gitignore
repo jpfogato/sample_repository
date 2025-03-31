@@ -10,6 +10,7 @@
 !*.lvlib
 !*.xctl
 !*.json
+!*.JSON
 !*.txt
 !*.ini
 !*.viancfg
