@@ -1,9 +1,11 @@
 # Ignore everything by default
-# *
+*
+
 
 # Allow only specific file extensions
 !*.vi
 !*.vim
+!*.vit
 !*.lvproj
 !*.ctl
 !*.lvclass
@@ -15,13 +17,8 @@
 !*.ini
 !*.viancfg
 !*.md
-!*.ps1 
+!*.ps1
+!*.bat 
 !*.vit
 !*.gitmodules
-
-# Ensure Git tracks folders (but not their ignored contents)
-# !*/
-
-# Ignore the specif folders
-docs/
-ext/
+!*.gitignore
